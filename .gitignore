@@ -39,3 +39,6 @@ project.properties
 # Gradle-based build
 .gradle
 build/
+
+# Secret keys
+keys.properties
