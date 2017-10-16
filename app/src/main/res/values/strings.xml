@@ -3,4 +3,9 @@
 
     <string name="order_most_popular">Most Popular</string>
     <string name="order_top_rated">Top Rated</string>
+
+    <string name="moview_detail_release_date">Release Date: %s</string>
+    <string name="moview_detail_user_rating">User Rating: %s</string>
+
+    <string name="content_description_movie_poster">Movie Poster</string>
 </resources>
