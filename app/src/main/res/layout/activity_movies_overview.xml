@@ -4,12 +4,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:paddingBottom="@dimen/vertical_margin"
+    android:paddingEnd="@dimen/horizontal_margin"
+    android:paddingStart="@dimen/horizontal_margin"
+    android:paddingTop="@dimen/vertical_margin"
     tools:context="com.josemgu91.popularmovies.MoviesOverviewActivity">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Hello World!"
+    <GridView
+        android:id="@+id/gridview_movies"
+        style="@style/AppTheme.MoviesGridView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"

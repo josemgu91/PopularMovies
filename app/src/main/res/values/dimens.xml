@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <dimen name="horizontal_margin">16dp</dimen>
+    <dimen name="vertical_margin">16dp</dimen>
+
+    <dimen name="movies_grid_column_width">110dp</dimen>
+    <dimen name="movies_grid_horizontal_spacing">10dp</dimen>
+    <dimen name="movies_grid_vertical_spacing">10dp</dimen>
+
+</resources>
