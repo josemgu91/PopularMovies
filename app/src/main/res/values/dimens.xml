@@ -4,10 +4,11 @@
     <dimen name="horizontal_margin">16dp</dimen>
     <dimen name="vertical_margin">16dp</dimen>
 
-    <dimen name="movies_grid_column_width">110dp</dimen>
     <dimen name="movies_grid_horizontal_spacing">10dp</dimen>
     <dimen name="movies_grid_vertical_spacing">10dp</dimen>
 
-    <dimen name="movie_poster_height">200dp</dimen>
+    <dimen name="movies_grid_element_height">250dp</dimen>
+
+    <dimen name="movie_poster_height">350dp</dimen>
 
 </resources>
