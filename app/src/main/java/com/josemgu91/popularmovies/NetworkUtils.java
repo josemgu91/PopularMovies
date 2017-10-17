@@ -24,7 +24,7 @@ public class NetworkUtils {
     private final static String PATH_POPULAR_MOVIES = "movie/popular";
     private final static String PATH_TOP_RATED_MOVIES = "movie/top_rated";
     private final static String PATH_THUMBNAIL_IMAGE_SIZE = "w185";
-    private final static String PATH_BIG_IMAGE_SIZE = "w780";
+    private final static String PATH_BIG_IMAGE_SIZE = "w500";
 
     public final static int IMAGE_SIZE_SMALL = 0;
     public final static int IMAGE_SIZE_BIG = 1;
