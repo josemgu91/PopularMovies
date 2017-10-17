@@ -1,6 +1,7 @@
 package com.josemgu91.popularmovies;
 
 import android.net.Uri;
+import android.support.annotation.IntDef;
 import android.util.Log;
 
 import java.io.IOException;
@@ -25,12 +26,23 @@ public class NetworkUtils {
     private final static String PATH_THUMBNAIL_IMAGE_SIZE = "w185";
     private final static String PATH_BIG_IMAGE_SIZE = "w780";
 
+    public final static int IMAGE_SIZE_SMALL = 0;
+    public final static int IMAGE_SIZE_BIG = 1;
+
+    @IntDef(flag = false,
+            value = {
+                    IMAGE_SIZE_SMALL,
+                    IMAGE_SIZE_BIG,
+            })
+    public @interface ImageSize {
+    }
+
     private static Uri.Builder createBaseUri() throws MalformedURLException {
         return Uri.parse(TMDB_BASE_URL).buildUpon()
                 .appendQueryParameter(PARAM_API_KEY, BuildConfig.THE_MOVIES_DB_API_KEY);
     }
 
-    private static Uri.Builder createImageUri() throws MalformedURLException {
+    private static Uri.Builder createBaseImageUri() throws MalformedURLException {
         return Uri.parse(TMDB_IMAGE_URL).buildUpon();
     }
 
@@ -69,6 +81,19 @@ public class NetworkUtils {
                 .appendEncodedPath(PATH_TOP_RATED_MOVIES)
                 .build();
         return getResponseFromServer(uri);
+    }
+
+    public static Uri createImageUri(final String posterPath, @ImageSize final int size) throws MalformedURLException {
+        final String imageSizePath;
+        if (size == IMAGE_SIZE_SMALL) {
+            imageSizePath = PATH_THUMBNAIL_IMAGE_SIZE;
+        } else {
+            imageSizePath = PATH_BIG_IMAGE_SIZE;
+        }
+        return createBaseImageUri()
+                .appendEncodedPath(imageSizePath)
+                .appendEncodedPath(posterPath)
+                .build();
     }
 
 }
