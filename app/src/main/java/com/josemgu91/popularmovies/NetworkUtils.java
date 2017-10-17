@@ -22,7 +22,8 @@ public class NetworkUtils {
     private final static String PARAM_API_KEY = "api_key";
     private final static String PATH_POPULAR_MOVIES = "movie/popular";
     private final static String PATH_TOP_RATED_MOVIES = "movie/top_rated";
-    private final static String PATH_DEFAULT_IMAGE_SIZE = "w185";
+    private final static String PATH_THUMBNAIL_IMAGE_SIZE = "w185";
+    private final static String PATH_BIG_IMAGE_SIZE = "w780";
 
     private static Uri.Builder createBaseUri() throws MalformedURLException {
         return Uri.parse(TMDB_BASE_URL).buildUpon()
