@@ -6,7 +6,7 @@ keysProperties.load(new FileInputStream(keysPropertiesFile))
 
 android {
     compileSdkVersion 26
-    buildToolsVersion "26.0.2"
+    buildToolsVersion "27.0.1"
     defaultConfig {
         applicationId "com.josemgu91.popularmovies"
         minSdkVersion 19
