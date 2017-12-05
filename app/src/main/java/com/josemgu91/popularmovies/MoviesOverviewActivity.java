@@ -58,6 +58,9 @@ public class MoviesOverviewActivity extends AppCompatActivity {
                 item.setChecked(true);
                 fetchTopRatedMovies();
                 return true;
+            case R.id.action_favorites:
+                item.setChecked(true);
+                fetchFavoriteMovies();
             default:
                 return false;
         }
@@ -67,6 +70,10 @@ public class MoviesOverviewActivity extends AppCompatActivity {
     protected void onDestroy() {
         cancelCurrentFetchTask();
         super.onDestroy();
+    }
+
+    private void fetchFavoriteMovies() {
+
     }
 
     private void fetchMostPopularMovies() {
