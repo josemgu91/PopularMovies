@@ -8,6 +8,7 @@ CREATE TABLE IF NOT EXISTS `movies` (
 	`userRating`	REAL NOT NULL,
 	`popularity`	REAL NOT NULL,
 	`isFavorite`	INTEGER NOT NULL DEFAULT 0,
+	`remoteId`	TEXT NOT NULL UNIQUE,
 	PRIMARY KEY(`_id`)
 );
 CREATE TABLE IF NOT EXISTS `trailers` (

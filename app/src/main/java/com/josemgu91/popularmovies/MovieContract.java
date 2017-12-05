@@ -32,6 +32,7 @@ public class MovieContract {
         public static final String USER_RATING = "userRating";
         public static final String POPULARITY = "popularity";
         public static final String IS_FAVORITE = "isFavorite";
+        public static final String REMOTE_ID = "remoteId";
 
     }
 
