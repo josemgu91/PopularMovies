@@ -15,7 +15,7 @@ import java.io.InputStreamReader;
 public class DatabaseManager extends SQLiteOpenHelper {
 
     private final static String DATABASE_NAME = "movies.db";
-    private final static int DATABASE_VERSION = 1;
+    private final static int DATABASE_VERSION = 2;
 
     private final Context context;
 
