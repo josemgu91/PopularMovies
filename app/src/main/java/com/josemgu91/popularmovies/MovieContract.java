@@ -1,5 +1,6 @@
 package com.josemgu91.popularmovies;
 
+import android.net.Uri;
 import android.provider.BaseColumns;
 
 /**
@@ -8,7 +9,19 @@ import android.provider.BaseColumns;
 
 public class MovieContract {
 
+    public static final String CONTENT_AUTHORITY = "com.josemgu91.popularmovies.ContentProvider";
+
+    public static final Uri BASE_CONTENT_URI = Uri.parse("content://" + CONTENT_AUTHORITY);
+
+    public static final String PATH_MOVIE = "movie";
+    public static final String PATH_REVIEW = "review";
+    public static final String PATH_TRAILER = "trailer";
+
     public static class MovieEntry implements BaseColumns {
+
+        public static final Uri CONTENT_URI = BASE_CONTENT_URI.buildUpon()
+                .appendPath(PATH_MOVIE)
+                .build();
 
         public static final String TABLE_NAME = "movies";
 
@@ -24,6 +37,10 @@ public class MovieContract {
 
     public static class ReviewEntry implements BaseColumns {
 
+        public static final Uri CONTENT_URI = BASE_CONTENT_URI.buildUpon()
+                .appendPath(PATH_REVIEW)
+                .build();
+
         public static final String TABLE_NAME = "reviews";
 
         public static final String AUTHOR = "author";
@@ -33,6 +50,10 @@ public class MovieContract {
     }
 
     public static class TrailerEntry implements BaseColumns {
+
+        public static final Uri CONTENT_URI = BASE_CONTENT_URI.buildUpon()
+                .appendPath(PATH_TRAILER)
+                .build();
 
         public static final String TABLE_NAME = "trailers";
 
