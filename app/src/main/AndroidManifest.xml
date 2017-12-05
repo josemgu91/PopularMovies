@@ -20,6 +20,11 @@
         </activity>
 
         <activity android:name=".MovieDetailActivity" />
+
+        <provider
+            android:name=".MoviesProvider"
+            android:authorities="com.josemgu91.popularmovies.ContentProvider"
+            android:exported="false" />
     </application>
 
 </manifest>
