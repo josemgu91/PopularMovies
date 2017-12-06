@@ -20,11 +20,19 @@ public class NetworkUtils {
 
     private final static String TMDB_BASE_URL = "http://api.themoviedb.org/3";
     private final static String TMDB_IMAGE_URL = "http://image.tmdb.org/t/p/";
+
     private final static String PARAM_API_KEY = "api_key";
+    private final static String PARAM_LANGUAGE = "language";
+
     private final static String PATH_POPULAR_MOVIES = "movie/popular";
     private final static String PATH_TOP_RATED_MOVIES = "movie/top_rated";
+    private final static String PATH_TRAILERS = "movie/%s/videos";
+    private final static String PATH_REVIEWS = "movie/%s/reviews";
+
     private final static String PATH_THUMBNAIL_IMAGE_SIZE = "w342";
     private final static String PATH_BIG_IMAGE_SIZE = "w780";
+
+    private final static String DEFAULT_LANGUAGE = "en-US";
 
     public final static int IMAGE_SIZE_SMALL = 0;
     public final static int IMAGE_SIZE_BIG = 1;
@@ -39,7 +47,8 @@ public class NetworkUtils {
 
     private static Uri.Builder createBaseUri() throws MalformedURLException {
         return Uri.parse(TMDB_BASE_URL).buildUpon()
-                .appendQueryParameter(PARAM_API_KEY, BuildConfig.THE_MOVIES_DB_API_KEY);
+                .appendQueryParameter(PARAM_API_KEY, BuildConfig.THE_MOVIES_DB_API_KEY)
+                .appendQueryParameter(PARAM_LANGUAGE, DEFAULT_LANGUAGE);
     }
 
     private static Uri.Builder createBaseImageUri() throws MalformedURLException {
@@ -79,6 +88,20 @@ public class NetworkUtils {
     public static String getTopRatedMovies() throws IOException {
         final Uri uri = createBaseUri()
                 .appendEncodedPath(PATH_TOP_RATED_MOVIES)
+                .build();
+        return getResponseFromServer(uri);
+    }
+
+    public static String getTrailers(final String movieId) throws IOException {
+        final Uri uri = createBaseUri()
+                .appendEncodedPath(String.format(PATH_TRAILERS, movieId))
+                .build();
+        return getResponseFromServer(uri);
+    }
+
+    public static String getReviews(final String movieId) throws IOException {
+        final Uri uri = createBaseUri()
+                .appendEncodedPath(String.format(PATH_REVIEWS, movieId))
                 .build();
         return getResponseFromServer(uri);
     }
