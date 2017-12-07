@@ -28,7 +28,7 @@ public class NetworkUtils {
 
     private final static String PATH_POPULAR_MOVIES = "movie/popular";
     private final static String PATH_TOP_RATED_MOVIES = "movie/top_rated";
-    private final static String PATH_TRAILERS = "movie/%s/videos";
+    private final static String PATH_VIDEOS = "movie/%s/videos";
     private final static String PATH_REVIEWS = "movie/%s/reviews";
 
     private final static String PATH_THUMBNAIL_IMAGE_SIZE = "w342";
@@ -94,9 +94,9 @@ public class NetworkUtils {
         return getResponseFromServer(uri);
     }
 
-    public static String getTrailers(final String movieId) throws IOException {
+    public static String getVideos(final String movieId) throws IOException {
         final Uri uri = createBaseUri()
-                .appendEncodedPath(String.format(PATH_TRAILERS, movieId))
+                .appendEncodedPath(String.format(PATH_VIDEOS, movieId))
                 .build();
         return getResponseFromServer(uri);
     }
