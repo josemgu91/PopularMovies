@@ -1,8 +1,10 @@
-package com.josemgu91.popularmovies;
+package com.josemgu91.popularmovies.network;
 
 import android.net.Uri;
 import android.support.annotation.IntDef;
 import android.util.Log;
+
+import com.josemgu91.popularmovies.BuildConfig;
 
 import java.io.IOException;
 import java.io.InputStreamReader;

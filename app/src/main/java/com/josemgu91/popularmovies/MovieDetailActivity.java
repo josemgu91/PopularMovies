@@ -7,6 +7,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.josemgu91.popularmovies.network.Movie;
+import com.josemgu91.popularmovies.network.NetworkUtils;
 import com.squareup.picasso.Picasso;
 
 import java.net.MalformedURLException;

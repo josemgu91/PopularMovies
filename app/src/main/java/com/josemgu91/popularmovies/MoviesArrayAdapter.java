@@ -9,6 +9,8 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 
+import com.josemgu91.popularmovies.network.Movie;
+import com.josemgu91.popularmovies.network.NetworkUtils;
 import com.squareup.picasso.Picasso;
 
 import java.net.MalformedURLException;

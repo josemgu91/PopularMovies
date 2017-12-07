@@ -10,6 +10,10 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
 
+import com.josemgu91.popularmovies.network.Movie;
+import com.josemgu91.popularmovies.network.NetworkUtils;
+import com.josemgu91.popularmovies.network.ServerResponseParser;
+
 import org.json.JSONException;
 
 import java.io.IOException;
