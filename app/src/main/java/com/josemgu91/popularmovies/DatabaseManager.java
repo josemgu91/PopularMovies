@@ -15,7 +15,7 @@ import java.io.InputStreamReader;
 public class DatabaseManager extends SQLiteOpenHelper {
 
     private final static String DATABASE_NAME = "movies.db";
-    private final static int DATABASE_VERSION = 3;
+    private final static int DATABASE_VERSION = 4;
 
     private final Context context;
 
@@ -39,7 +39,7 @@ public class DatabaseManager extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS " + MovieContract.MovieEntry.TABLE_NAME);
         db.execSQL("DROP TABLE IF EXISTS " + MovieContract.ReviewEntry.TABLE_NAME);
-        db.execSQL("DROP TABLE IF EXISTS " + MovieContract.TrailerEntry.TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS " + MovieContract.VideoEntry.TABLE_NAME);
         onCreate(db);
     }
 

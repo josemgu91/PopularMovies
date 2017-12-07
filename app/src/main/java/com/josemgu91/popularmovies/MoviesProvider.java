@@ -23,8 +23,8 @@ public class MoviesProvider extends ContentProvider {
     private final static int URI_MOVIE_WITH_ID = 101;
     private final static int URI_REVIEW = 200;
     private final static int URI_REVIEW_WITH_MOVIE_ID = 201;
-    private final static int URI_TRAILER = 300;
-    private final static int URI_TRAILER_WITH_MOVIE_ID = 301;
+    private final static int URI_VIDEO = 300;
+    private final static int URI_VIDEO_WITH_MOVIE_ID = 301;
 
     static {
         URI_MATCHER = new UriMatcher(UriMatcher.NO_MATCH);
@@ -50,13 +50,13 @@ public class MoviesProvider extends ContentProvider {
         );
         URI_MATCHER.addURI(
                 MovieContract.CONTENT_AUTHORITY,
-                MovieContract.TrailerEntry.CONTENT_URI.getPath(),
-                URI_TRAILER
+                MovieContract.VideoEntry.CONTENT_URI.getPath(),
+                URI_VIDEO
         );
         URI_MATCHER.addURI(
                 MovieContract.CONTENT_AUTHORITY,
-                MovieContract.TrailerEntry.CONTENT_URI.getPath() + "/#",
-                URI_TRAILER_WITH_MOVIE_ID
+                MovieContract.VideoEntry.CONTENT_URI.getPath() + "/#",
+                URI_VIDEO_WITH_MOVIE_ID
         );
     }
 
@@ -80,9 +80,9 @@ public class MoviesProvider extends ContentProvider {
                 selection = MovieContract.ReviewEntry.MOVIE_ID + "=" + uri.getLastPathSegment();
                 tableName = MovieContract.ReviewEntry.TABLE_NAME;
                 break;
-            case URI_TRAILER_WITH_MOVIE_ID:
-                selection = MovieContract.TrailerEntry.MOVIE_ID + "=" + uri.getLastPathSegment();
-                tableName = MovieContract.TrailerEntry.TABLE_NAME;
+            case URI_VIDEO_WITH_MOVIE_ID:
+                selection = MovieContract.VideoEntry.MOVIE_ID + "=" + uri.getLastPathSegment();
+                tableName = MovieContract.VideoEntry.TABLE_NAME;
                 break;
             case URI_MOVIE:
                 tableName = MovieContract.MovieEntry.TABLE_NAME;
@@ -90,8 +90,8 @@ public class MoviesProvider extends ContentProvider {
             case URI_REVIEW:
                 tableName = MovieContract.ReviewEntry.TABLE_NAME;
                 break;
-            case URI_TRAILER:
-                tableName = MovieContract.TrailerEntry.TABLE_NAME;
+            case URI_VIDEO:
+                tableName = MovieContract.VideoEntry.TABLE_NAME;
                 break;
             case UriMatcher.NO_MATCH:
                 throw new IllegalArgumentException("Unknown URI: " + uri);
@@ -134,9 +134,9 @@ public class MoviesProvider extends ContentProvider {
                                 null,
                                 values);
                 break;
-            case URI_TRAILER:
+            case URI_VIDEO:
                 id = databaseManager.getWritableDatabase()
-                        .insert(MovieContract.TrailerEntry.TABLE_NAME,
+                        .insert(MovieContract.VideoEntry.TABLE_NAME,
                                 null,
                                 values);
                 break;
@@ -169,8 +169,8 @@ public class MoviesProvider extends ContentProvider {
                                 MovieContract.ReviewEntry.MOVIE_ID + "=?",
                                 new String[]{movieId});
                 trailerRowsDeleted = databaseManager.getWritableDatabase()
-                        .delete(MovieContract.TrailerEntry.TABLE_NAME,
-                                MovieContract.TrailerEntry.MOVIE_ID + "=?",
+                        .delete(MovieContract.VideoEntry.TABLE_NAME,
+                                MovieContract.VideoEntry.MOVIE_ID + "=?",
                                 new String[]{movieId});
                 movieRowsDeleted = databaseManager.getWritableDatabase()
                         .delete(MovieContract.MovieEntry.TABLE_NAME,
@@ -183,7 +183,7 @@ public class MoviesProvider extends ContentProvider {
                                 null,
                                 null);
                 trailerRowsDeleted = databaseManager.getWritableDatabase()
-                        .delete(MovieContract.TrailerEntry.TABLE_NAME,
+                        .delete(MovieContract.VideoEntry.TABLE_NAME,
                                 null,
                                 null);
                 movieRowsDeleted = databaseManager.getWritableDatabase()
@@ -201,7 +201,7 @@ public class MoviesProvider extends ContentProvider {
             rowsDeleted += reviewRowsDeleted;
         }
         if (trailerRowsDeleted > 0) {
-            getContext().getContentResolver().notifyChange(MovieContract.TrailerEntry.CONTENT_URI, null);
+            getContext().getContentResolver().notifyChange(MovieContract.VideoEntry.CONTENT_URI, null);
             rowsDeleted += trailerRowsDeleted;
         }
         if (movieRowsDeleted > 0) {
@@ -224,9 +224,9 @@ public class MoviesProvider extends ContentProvider {
                 selection = MovieContract.ReviewEntry.MOVIE_ID + "=" + uri.getLastPathSegment();
                 tableName = MovieContract.ReviewEntry.TABLE_NAME;
                 break;
-            case URI_TRAILER_WITH_MOVIE_ID:
-                selection = MovieContract.TrailerEntry.MOVIE_ID + "=" + uri.getLastPathSegment();
-                tableName = MovieContract.TrailerEntry.TABLE_NAME;
+            case URI_VIDEO_WITH_MOVIE_ID:
+                selection = MovieContract.VideoEntry.MOVIE_ID + "=" + uri.getLastPathSegment();
+                tableName = MovieContract.VideoEntry.TABLE_NAME;
                 break;
             case UriMatcher.NO_MATCH:
                 throw new IllegalArgumentException("Unknown URI: " + uri);

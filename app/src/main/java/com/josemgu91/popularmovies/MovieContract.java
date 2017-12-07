@@ -52,13 +52,13 @@ public class MovieContract {
 
     }
 
-    public static class TrailerEntry implements BaseColumns {
+    public static class VideoEntry implements BaseColumns {
 
         public static final Uri CONTENT_URI = BASE_CONTENT_URI.buildUpon()
                 .appendPath(PATH_TRAILER)
                 .build();
 
-        public static final String TABLE_NAME = "trailers";
+        public static final String TABLE_NAME = "videos";
 
         public static final String TITLE = "title";
         public static final String URL = "url";

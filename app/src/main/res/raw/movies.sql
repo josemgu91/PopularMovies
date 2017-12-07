@@ -13,7 +13,7 @@ CREATE TABLE IF NOT EXISTS `movies` (
 	`remoteId`	TEXT NOT NULL UNIQUE,
 	PRIMARY KEY(`_id`)
 );
-CREATE TABLE IF NOT EXISTS `trailers` (
+CREATE TABLE IF NOT EXISTS `videos` (
 	`_id`	INTEGER,
 	`title`	TEXT NOT NULL,
 	`url`	TEXT NOT NULL,
@@ -26,7 +26,7 @@ CREATE TABLE IF NOT EXISTS `reviews` (
 	`author`	TEXT NOT NULL,
 	`content`	TEXT NOT NULL,
 	`movieId`	INTEGER NOT NULL,
-	FOREIGN KEY(`movieId`) REFERENCES `movies`(`_id`),
-	PRIMARY KEY(`_id`)
+	PRIMARY KEY(`_id`),
+	FOREIGN KEY(`movieId`) REFERENCES `movies`(`_id`)
 );
 COMMIT;
