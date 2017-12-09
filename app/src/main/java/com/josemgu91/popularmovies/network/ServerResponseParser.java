@@ -33,19 +33,23 @@ public class ServerResponseParser {
     private final static String KEY_VIDEO_NAME = "name";
     private final static String KEY_VIDEO_VIDEO_ID = "key";
 
+    public static Movie parseMovie(final String jsonString) throws JSONException {
+        return new MovieParser().parse(new JSONObject(jsonString));
+    }
+
     public static List<Movie> parseMovies(final String jsonString) throws JSONException {
-        return parseResult(jsonString, new MovieParser());
+        return parseBulkResult(jsonString, new MovieParser());
     }
 
     public static List<Review> parseReviews(final String jsonString) throws JSONException {
-        return parseResult(jsonString, new ReviewParser());
+        return parseBulkResult(jsonString, new ReviewParser());
     }
 
     public static List<Video> parseVideos(final String jsonString) throws JSONException {
-        return parseResult(jsonString, new VideoParser());
+        return parseBulkResult(jsonString, new VideoParser());
     }
 
-    private static <E> List<E> parseResult(final String jsonString, final Parser<E> parser) throws JSONException {
+    private static <E> List<E> parseBulkResult(final String jsonString, final Parser<E> parser) throws JSONException {
         final ArrayList<E> results = new ArrayList<>();
         final JSONObject jsonResponse = new JSONObject(jsonString);
         final JSONArray jsonArray = jsonResponse.getJSONArray(KEY_RESULTS);
