@@ -3,6 +3,7 @@ package com.josemgu91.popularmovies;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -15,7 +16,7 @@ import java.io.InputStreamReader;
 public class DatabaseManager extends SQLiteOpenHelper {
 
     private final static String DATABASE_NAME = "movies.db";
-    private final static int DATABASE_VERSION = 5;
+    private final static int DATABASE_VERSION = 6;
 
     private final Context context;
 
@@ -29,7 +30,12 @@ public class DatabaseManager extends SQLiteOpenHelper {
         final String databaseSqlCreationScript;
         try {
             databaseSqlCreationScript = loadDatabaseSqlCreationScript();
-            db.execSQL(databaseSqlCreationScript);
+            Log.d("DatabaseManager", databaseSqlCreationScript);
+            final String[] statements = databaseSqlCreationScript.split(";");
+            for (final String statement : statements) {
+                Log.d("DatabaseManager", "Split statement: " + statement);
+                db.execSQL(statement);
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
