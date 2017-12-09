@@ -4,7 +4,7 @@ CREATE TABLE IF NOT EXISTS `movies` (
 	`title`	TEXT NOT NULL,
 	`plotSynopsis`	TEXT NOT NULL,
 	`releaseDate`	TEXT NOT NULL,
-	`posterUrl`	TEXT NOT NULL,
+	`posterRemoteId`	TEXT NOT NULL,
 	`userRating`	REAL NOT NULL,
 	`popularity`	REAL NOT NULL,
 	`isFavorite`	INTEGER NOT NULL DEFAULT 0,
@@ -18,8 +18,8 @@ CREATE TABLE IF NOT EXISTS `videos` (
 	`title`	TEXT NOT NULL,
 	`url`	TEXT NOT NULL,
 	`movieId`	INTEGER NOT NULL,
-	FOREIGN KEY(`movieId`) REFERENCES `movies`(`_id`),
-	PRIMARY KEY(`_id`)
+	PRIMARY KEY(`_id`),
+	FOREIGN KEY(`movieId`) REFERENCES `movies`(`_id`)
 );
 CREATE TABLE IF NOT EXISTS `reviews` (
 	`_id`	INTEGER,

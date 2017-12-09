@@ -28,7 +28,7 @@ public class MovieContract {
         public static final String TITLE = "title";
         public static final String PLOT_SYNOPSIS = "plotSynopsis";
         public static final String RELEASE_DATE = "releaseDate";
-        public static final String POSTER_URL = "posterUrl";
+        public static final String POSTER_REMOTE_ID = "posterRemoteId";
         public static final String USER_RATING = "userRating";
         public static final String POPULARITY = "popularity";
         public static final String IS_FAVORITE = "isFavorite";
