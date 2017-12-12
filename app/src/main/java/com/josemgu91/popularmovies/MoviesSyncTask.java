@@ -73,7 +73,7 @@ public class MoviesSyncTask {
             }
         }
 
-        final Map<String, List<Video>> videosMap = new HashMap<>();
+        /*final Map<String, List<Video>> videosMap = new HashMap<>();
         final Map<String, List<Review>> reviewsMap = new HashMap<>();
         for (final String remoteId : moviesRemoteIdList) {
             final String videosJsonString = NetworkUtils.getVideos(remoteId);
@@ -82,7 +82,7 @@ public class MoviesSyncTask {
             final List<Review> reviews = ServerResponseParser.parseReviews(reviewsJsonString);
             videosMap.put(remoteId, videos);
             reviewsMap.put(remoteId, reviews);
-        }
+        }*/
 
         final List<Movie> favoriteMoviesList = new ArrayList<>();
         for (final String remoteId : favoriteMoviesRemoteIdList) {
@@ -146,7 +146,7 @@ public class MoviesSyncTask {
                     contentResolver.insert(MovieContract.MovieEntry.CONTENT_URI,
                             movieContentValues)
             );
-            final List<Review> reviews = reviewsMap.get(movie.getId());
+            /*final List<Review> reviews = reviewsMap.get(movie.getId());
             if (reviews != null) {
                 for (final Review review : reviews) {
                     final ContentValues reviewContentValues = new ContentValues();
@@ -156,8 +156,8 @@ public class MoviesSyncTask {
                     contentResolver.insert(MovieContract.ReviewEntry.CONTENT_URI,
                             reviewContentValues);
                 }
-            }
-            final List<Video> videos = videosMap.get(movie.getId());
+            }*/
+            /*final List<Video> videos = videosMap.get(movie.getId());
             if (videos != null) {
                 for (final Video video : videos) {
                     final ContentValues videoContentValues = new ContentValues();
@@ -167,7 +167,7 @@ public class MoviesSyncTask {
                     contentResolver.insert(MovieContract.VideoEntry.CONTENT_URI,
                             videoContentValues);
                 }
-            }
+            }*/
         }
 
     }
