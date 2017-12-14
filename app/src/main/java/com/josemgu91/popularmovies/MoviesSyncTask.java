@@ -1,24 +1,19 @@
 package com.josemgu91.popularmovies;
 
 import android.content.ContentResolver;
-import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 
 import com.josemgu91.popularmovies.network.Movie;
 import com.josemgu91.popularmovies.network.NetworkUtils;
-import com.josemgu91.popularmovies.network.Review;
 import com.josemgu91.popularmovies.network.ServerResponseParser;
-import com.josemgu91.popularmovies.network.Video;
 
 import org.json.JSONException;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by jose on 12/5/17.
@@ -26,7 +21,7 @@ import java.util.Map;
 
 public class MoviesSyncTask {
 
-    synchronized public static void syncMovies(final Context context) throws IOException, JSONException {
+    synchronized public static void sync(final Context context) throws IOException, JSONException {
 
         final ContentResolver contentResolver = context.getContentResolver();
 
@@ -72,17 +67,6 @@ public class MoviesSyncTask {
                 moviesRemoteIdList.add(remoteId);
             }
         }
-
-        /*final Map<String, List<Video>> videosMap = new HashMap<>();
-        final Map<String, List<Review>> reviewsMap = new HashMap<>();
-        for (final String remoteId : moviesRemoteIdList) {
-            final String videosJsonString = NetworkUtils.getVideos(remoteId);
-            final List<Video> videos = ServerResponseParser.parseVideos(videosJsonString);
-            final String reviewsJsonString = NetworkUtils.getReviews(remoteId);
-            final List<Review> reviews = ServerResponseParser.parseReviews(reviewsJsonString);
-            videosMap.put(remoteId, videos);
-            reviewsMap.put(remoteId, reviews);
-        }*/
 
         final List<Movie> favoriteMoviesList = new ArrayList<>();
         for (final String remoteId : favoriteMoviesRemoteIdList) {
@@ -142,32 +126,8 @@ public class MoviesSyncTask {
             movieContentValues.put(MovieContract.MovieEntry.TITLE, movie.getOriginalTitle());
             movieContentValues.put(MovieContract.MovieEntry.REMOTE_ID, movie.getId());
             movieContentValues.put(MovieContract.MovieEntry.USER_RATING, movie.getUserRating());
-            final long movieLocalId = ContentUris.parseId(
-                    contentResolver.insert(MovieContract.MovieEntry.CONTENT_URI,
-                            movieContentValues)
-            );
-            /*final List<Review> reviews = reviewsMap.get(movie.getId());
-            if (reviews != null) {
-                for (final Review review : reviews) {
-                    final ContentValues reviewContentValues = new ContentValues();
-                    reviewContentValues.put(MovieContract.ReviewEntry.AUTHOR, review.getAuthor());
-                    reviewContentValues.put(MovieContract.ReviewEntry.CONTENT, review.getContent());
-                    reviewContentValues.put(MovieContract.ReviewEntry.MOVIE_ID, movieLocalId);
-                    contentResolver.insert(MovieContract.ReviewEntry.CONTENT_URI,
-                            reviewContentValues);
-                }
-            }*/
-            /*final List<Video> videos = videosMap.get(movie.getId());
-            if (videos != null) {
-                for (final Video video : videos) {
-                    final ContentValues videoContentValues = new ContentValues();
-                    videoContentValues.put(MovieContract.VideoEntry.MOVIE_ID, movieLocalId);
-                    videoContentValues.put(MovieContract.VideoEntry.TITLE, video.getName());
-                    videoContentValues.put(MovieContract.VideoEntry.URL, video.getUrl().toString());
-                    contentResolver.insert(MovieContract.VideoEntry.CONTENT_URI,
-                            videoContentValues);
-                }
-            }*/
+            contentResolver.insert(MovieContract.MovieEntry.CONTENT_URI,
+                    movieContentValues);
         }
 
     }

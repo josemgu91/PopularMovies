@@ -14,6 +14,8 @@ import java.io.IOException;
 
 public class MoviesSyncIntentService extends IntentService {
 
+    public static final String PARAM_MOVIE_ID = "com.josemgu91.popularmovies.MOVIE_ID";
+
     public MoviesSyncIntentService() {
         super("MoviesSyncIntentService");
     }
@@ -21,7 +23,11 @@ public class MoviesSyncIntentService extends IntentService {
     @Override
     protected void onHandleIntent(@Nullable Intent intent) {
         try {
-            MoviesSyncTask.syncMovies(this);
+            if (intent.hasExtra(PARAM_MOVIE_ID)) {
+                MovieDetailsSyncTask.sync(intent.getStringExtra(PARAM_MOVIE_ID), this);
+            } else {
+                MoviesSyncTask.sync(this);
+            }
         } catch (IOException | JSONException e) {
             e.printStackTrace();
         }
