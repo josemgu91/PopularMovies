@@ -5,6 +5,7 @@
     <string name="order_most_popular">Most Popular</string>
     <string name="order_top_rated">Top Rated</string>
     <string name="favorites">Favorites</string>
+    <string name="refresh">Refresh</string>
 
     <string name="movie_detail_original_title">Original title: %s</string>
     <string name="movie_detail_plot_synopsis">Plot Synopsis:\n%s</string>

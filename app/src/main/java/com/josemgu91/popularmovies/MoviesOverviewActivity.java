@@ -6,14 +6,17 @@ import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.ProgressBar;
 
-public class MoviesOverviewActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
+public class MoviesOverviewActivity extends AppCompatActivity
+        implements LoaderManager.LoaderCallbacks<Cursor>, SwipeRefreshLayout.OnRefreshListener {
 
     private MoviesCursorAdapter moviesCursorAdapter;
 
@@ -24,11 +27,20 @@ public class MoviesOverviewActivity extends AppCompatActivity implements LoaderM
     private final static int LOADER_MOVIE_FILTER_TOP_RATED = 2;
     private final static int LOADER_MOVIE_FILTER_FAVORITE = 3;
 
+    private GridView gridViewMovies;
+    private SwipeRefreshLayout swipeRefreshLayout;
+    private ProgressBar progressBar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_movies_overview);
-        final GridView gridViewMovies = findViewById(R.id.gridview_movies);
+        gridViewMovies = findViewById(R.id.gridview_movies);
+        swipeRefreshLayout = findViewById(R.id.swiperefreshlayout);
+        progressBar = findViewById(R.id.progressbar);
+
+        swipeRefreshLayout.setOnRefreshListener(this);
         gridViewMovies.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -39,9 +51,21 @@ public class MoviesOverviewActivity extends AppCompatActivity implements LoaderM
         });
         moviesCursorAdapter = new MoviesCursorAdapter(this);
         gridViewMovies.setAdapter(moviesCursorAdapter);
+
+        showLoading();
+
         final Bundle defaultLoaderArguments = new Bundle();
         defaultLoaderArguments.putInt(LOADER_ARG_KEY_MOVIE_FILTER, LOADER_MOVIE_FILTER_MOST_POPULAR);
         getSupportLoaderManager().initLoader(LOADER_ID_MOVIES, defaultLoaderArguments, this);
+
+        if (savedInstanceState == null) {
+            refresh();
+        }
+    }
+
+    @Override
+    public void onRefresh() {
+        refresh();
     }
 
     @Override
@@ -80,9 +104,7 @@ public class MoviesOverviewActivity extends AppCompatActivity implements LoaderM
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         moviesCursorAdapter.swapCursor(data);
-        if (data.getCount() == 0) {
-            dispatchSync();
-        }
+        dismissLoading();
     }
 
     @Override
@@ -111,23 +133,56 @@ public class MoviesOverviewActivity extends AppCompatActivity implements LoaderM
             case R.id.action_favorites:
                 item.setChecked(true);
                 fetchFavoriteMovies();
+                return true;
+            case R.id.action_refresh:
+                refresh();
+                return true;
             default:
                 return false;
         }
     }
 
-    private void fetchFavoriteMovies() {
+    private void refresh() {
+        showLoading();
+        dispatchSync();
+    }
 
+    private void fetchFavoriteMovies() {
+        restartLoader(LOADER_MOVIE_FILTER_FAVORITE);
     }
 
     private void fetchMostPopularMovies() {
+        restartLoader(LOADER_MOVIE_FILTER_MOST_POPULAR);
     }
 
     private void fetchTopRatedMovies() {
+        restartLoader(LOADER_MOVIE_FILTER_TOP_RATED);
+    }
+
+    private void restartLoader(int filter) {
+        final Bundle loaderArguments = new Bundle();
+        loaderArguments.putInt(LOADER_ARG_KEY_MOVIE_FILTER, filter);
+        getSupportLoaderManager().restartLoader(
+                LOADER_ID_MOVIES,
+                loaderArguments,
+                this
+        );
+    }
+
+    private void showLoading() {
+        gridViewMovies.setVisibility(View.INVISIBLE);
+        progressBar.setVisibility(View.VISIBLE);
+    }
+
+    private void dismissLoading() {
+        if (swipeRefreshLayout.isRefreshing()) {
+            swipeRefreshLayout.setRefreshing(false);
+        }
+        gridViewMovies.setVisibility(View.VISIBLE);
+        progressBar.setVisibility(View.INVISIBLE);
     }
 
     private void dispatchSync() {
         startService(new Intent(this, MoviesSyncIntentService.class));
     }
-
 }

@@ -21,4 +21,9 @@
             android:title="@string/favorites"
             app:showAsAction="never" />
     </group>
+    <item
+        android:id="@+id/action_refresh"
+        android:title="@string/refresh"
+        app:showAsAction="never" />
+
 </menu>
