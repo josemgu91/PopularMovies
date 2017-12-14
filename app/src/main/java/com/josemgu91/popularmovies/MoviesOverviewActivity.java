@@ -44,9 +44,14 @@ public class MoviesOverviewActivity extends AppCompatActivity
         gridViewMovies.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                startActivity(
-                        new Intent(MoviesOverviewActivity.this, MovieDetailActivity.class)
-                );
+                final Cursor cursor = moviesCursorAdapter.getCursor();
+                if (cursor.moveToPosition(position)) {
+                    final String remoteId = cursor.getString(cursor.getColumnIndex(MovieContract.MovieEntry.REMOTE_ID));
+                    startActivity(
+                            new Intent(MoviesOverviewActivity.this, MovieDetailActivity.class)
+                                    .putExtra(MovieDetailActivity.PARAM_MOVIE_REMOTE_ID, remoteId)
+                    );
+                }
             }
         });
         moviesCursorAdapter = new MoviesCursorAdapter(this);

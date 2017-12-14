@@ -2,7 +2,8 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:context=".MoviesOverviewActivity">
 
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/swiperefreshlayout"
@@ -17,8 +18,7 @@
             android:paddingBottom="@dimen/vertical_margin"
             android:paddingEnd="@dimen/horizontal_margin"
             android:paddingStart="@dimen/horizontal_margin"
-            android:paddingTop="@dimen/vertical_margin"
-            tools:context="com.josemgu91.popularmovies.MoviesOverviewActivity" />
+            android:paddingTop="@dimen/vertical_margin" />
     </android.support.v4.widget.SwipeRefreshLayout>
 
     <ProgressBar

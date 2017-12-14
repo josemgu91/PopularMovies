@@ -15,7 +15,7 @@ public class MovieContract {
 
     public static final String PATH_MOVIE = "movie";
     public static final String PATH_REVIEW = "review";
-    public static final String PATH_TRAILER = "trailer";
+    public static final String PATH_VIDEO = "video";
 
     public static class MovieEntry implements BaseColumns {
 
@@ -55,7 +55,7 @@ public class MovieContract {
     public static class VideoEntry implements BaseColumns {
 
         public static final Uri CONTENT_URI = BASE_CONTENT_URI.buildUpon()
-                .appendPath(PATH_TRAILER)
+                .appendPath(PATH_VIDEO)
                 .build();
 
         public static final String TABLE_NAME = "videos";
