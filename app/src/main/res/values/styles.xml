@@ -10,10 +10,17 @@
     </style>
 
     <style name="AppTheme.MoviesGridView" parent="AppTheme">
-        <item name="android:numColumns">auto_fit</item>
+        <item name="android:numColumns">2</item>
         <item name="android:clipToPadding">false</item>
         <item name="android:horizontalSpacing">@dimen/movies_grid_horizontal_spacing</item>
         <item name="android:verticalSpacing">@dimen/movies_grid_vertical_spacing</item>
+    </style>
+
+    <style name="AppTheme.MoviesGridElement" parent="AppTheme">
+        <item name="android:layout_width">@dimen/movies_grid_element_width</item>
+        <item name="android:layout_height">@dimen/movies_grid_element_height</item>
+        <item name="android:adjustViewBounds">true</item>
+        <item name="android:scaleType">centerCrop</item>
     </style>
 
     <style name="ProgressBar" parent="Widget.AppCompat.ProgressBar">
