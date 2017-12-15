@@ -1,7 +1,10 @@
 package com.josemgu91.popularmovies;
 
 import android.app.IntentService;
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.support.annotation.Nullable;
 
 import org.json.JSONException;
@@ -22,7 +25,7 @@ public class MoviesSyncIntentService extends IntentService {
 
     @Override
     protected void onHandleIntent(@Nullable Intent intent) {
-        if (intent != null) {
+        if (intent != null && isNetworkAvailable()) {
             try {
                 if (intent.hasExtra(PARAM_MOVIE_ID)) {
                     MovieDetailsSyncTask.sync(intent.getStringExtra(PARAM_MOVIE_ID), this);
@@ -33,5 +36,12 @@ public class MoviesSyncIntentService extends IntentService {
                 e.printStackTrace();
             }
         }
+    }
+
+    private boolean isNetworkAvailable() {
+        final ConnectivityManager connectivityManager
+                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        final NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 }
