@@ -82,10 +82,12 @@ public class MoviesSyncTask {
                 for (final Movie movie : topRatedMoviesList) {
                     if (movie.getId().equals(remoteId)) {
                         favoriteMoviesList.add(movie);
+                        found = true;
                         break;
                     }
                 }
-            } else {
+            }
+            if (!found) {
                 final String movieJson = NetworkUtils.getDetails(remoteId);
                 final Movie movie = ServerResponseParser.parseMovie(movieJson);
                 favoriteMoviesList.add(movie);
