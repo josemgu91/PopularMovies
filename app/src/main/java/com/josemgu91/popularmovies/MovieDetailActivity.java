@@ -40,6 +40,8 @@ public class MovieDetailActivity extends AppCompatActivity
 
     public final static String PARAM_MOVIE_REMOTE_ID = "com.josemgu91.popularmovies.MOVIE_REMOTE_ID";
 
+    private final static String SAVED_INSTANCE_STATE_KEY_MOVIE_REMOTE_ID = "movie_remote_id";
+
     private String movieRemoteId;
     private String movieId;
 
@@ -48,6 +50,8 @@ public class MovieDetailActivity extends AppCompatActivity
     private TextView textViewMovieUserRating;
     private TextView textViewMovieReleaseDate;
     private TextView textViewMoviePlotSynopsis;
+
+    private SwipeRefreshLayout swipeRefreshLayout;
 
     private ViewGroup viewGroupVideos;
     private ViewGroup viewGroupReviews;
@@ -68,10 +72,14 @@ public class MovieDetailActivity extends AppCompatActivity
         textViewMovieReleaseDate = findViewById(R.id.textview_release_date);
         textViewMoviePlotSynopsis = findViewById(R.id.textview_plot_synopsis);
 
-        layoutInflater = LayoutInflater.from(this);
+        swipeRefreshLayout = findViewById(R.id.swiperefreshlayout);
 
         viewGroupVideos = findViewById(R.id.linearlayout_videos);
         viewGroupReviews = findViewById(R.id.linearlayout_reviews);
+
+        swipeRefreshLayout.setOnRefreshListener(this);
+
+        layoutInflater = LayoutInflater.from(this);
 
         if (savedInstanceState == null) {
             final Intent intentThatStartedThisActivity = getIntent();
@@ -79,18 +87,20 @@ public class MovieDetailActivity extends AppCompatActivity
                 movieRemoteId = intentThatStartedThisActivity.getStringExtra(PARAM_MOVIE_REMOTE_ID);
                 getSupportLoaderManager().initLoader(LOADER_ID_MOVIE_DETAIL, null, this);
             }
-        } else {
-            if (savedInstanceState.containsKey(PARAM_MOVIE_REMOTE_ID)) {
-                movieRemoteId = savedInstanceState.getString(PARAM_MOVIE_REMOTE_ID);
-                getSupportLoaderManager().initLoader(LOADER_ID_MOVIE_DETAIL, null, this);
-            }
         }
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
+        outState.putString(SAVED_INSTANCE_STATE_KEY_MOVIE_REMOTE_ID, movieRemoteId);
         super.onSaveInstanceState(outState);
-        outState.putString(PARAM_MOVIE_REMOTE_ID, movieRemoteId);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        movieRemoteId = savedInstanceState.getString(SAVED_INSTANCE_STATE_KEY_MOVIE_REMOTE_ID);
+        getSupportLoaderManager().restartLoader(LOADER_ID_MOVIE_DETAIL, null, this);
     }
 
     @Override
@@ -187,7 +197,9 @@ public class MovieDetailActivity extends AppCompatActivity
                     review.content = data.getString(data.getColumnIndex(MovieContract.ReviewEntry.CONTENT));
                     reviews.add(review);
                 }
+                viewGroupReviews.removeAllViews();
                 fillReviews(reviews);
+                dismissLoading();
                 break;
             case LOADER_ID_MOVIE_VIDEOS:
                 final List<Video> videos = new ArrayList<>();
@@ -197,7 +209,9 @@ public class MovieDetailActivity extends AppCompatActivity
                     video.url = Uri.parse(data.getString(data.getColumnIndex(MovieContract.VideoEntry.URL)));
                     videos.add(video);
                 }
+                viewGroupVideos.removeAllViews();
                 fillVideos(videos);
+                dismissLoading();
                 break;
         }
     }
@@ -282,6 +296,12 @@ public class MovieDetailActivity extends AppCompatActivity
                 null
         );
         setFavoriteIcon(!isFavorite);
+    }
+
+    private void dismissLoading() {
+        if (swipeRefreshLayout.isRefreshing()) {
+            swipeRefreshLayout.setRefreshing(false);
+        }
     }
 
     private static class Review {

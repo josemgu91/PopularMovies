@@ -3,6 +3,7 @@ package com.josemgu91.popularmovies;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.support.annotation.IdRes;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
@@ -30,6 +31,10 @@ public class MoviesOverviewActivity extends AppCompatActivity
     private GridView gridViewMovies;
     private SwipeRefreshLayout swipeRefreshLayout;
     private ProgressBar progressBar;
+
+    private static final String SAVED_INSTANCE_STATE_KEY_SELECTED_MENU_ID = "selected_menu_id";
+    @IdRes
+    private int selectedMenuId = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,6 +76,18 @@ public class MoviesOverviewActivity extends AppCompatActivity
     @Override
     public void onRefresh() {
         refresh();
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt(SAVED_INSTANCE_STATE_KEY_SELECTED_MENU_ID, selectedMenuId);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        selectedMenuId = savedInstanceState.getInt(SAVED_INSTANCE_STATE_KEY_SELECTED_MENU_ID);
     }
 
     @Override
@@ -120,6 +137,9 @@ public class MoviesOverviewActivity extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.movies_overview, menu);
+        if (selectedMenuId != 0) {
+            menu.findItem(selectedMenuId).setChecked(true);
+        }
         return true;
     }
 
@@ -130,14 +150,17 @@ public class MoviesOverviewActivity extends AppCompatActivity
             case R.id.action_order_most_popular:
                 item.setChecked(true);
                 fetchMostPopularMovies();
+                selectedMenuId = R.id.action_order_most_popular;
                 return true;
             case R.id.action_order_top_rated:
                 item.setChecked(true);
                 fetchTopRatedMovies();
+                selectedMenuId = R.id.action_order_top_rated;
                 return true;
             case R.id.action_favorites:
                 item.setChecked(true);
                 fetchFavoriteMovies();
+                selectedMenuId = R.id.action_favorites;
                 return true;
             case R.id.action_refresh:
                 refresh();
