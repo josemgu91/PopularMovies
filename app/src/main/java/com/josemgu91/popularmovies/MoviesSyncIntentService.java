@@ -22,14 +22,16 @@ public class MoviesSyncIntentService extends IntentService {
 
     @Override
     protected void onHandleIntent(@Nullable Intent intent) {
-        try {
-            if (intent.hasExtra(PARAM_MOVIE_ID)) {
-                MovieDetailsSyncTask.sync(intent.getStringExtra(PARAM_MOVIE_ID), this);
-            } else {
-                MoviesSyncTask.sync(this);
+        if (intent != null) {
+            try {
+                if (intent.hasExtra(PARAM_MOVIE_ID)) {
+                    MovieDetailsSyncTask.sync(intent.getStringExtra(PARAM_MOVIE_ID), this);
+                } else {
+                    MoviesSyncTask.sync(this);
+                }
+            } catch (IOException | JSONException e) {
+                e.printStackTrace();
             }
-        } catch (IOException | JSONException e) {
-            e.printStackTrace();
         }
     }
 }

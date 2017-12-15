@@ -32,7 +32,8 @@
                     android:contentDescription="@string/content_description_movie_poster"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:src="@drawable/ic_launcher_background" />
 
                 <TextView
                     android:id="@+id/textView_original_title"
@@ -41,7 +42,8 @@
                     android:layout_marginTop="16dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/imageview_movie_poster" />
+                    app:layout_constraintTop_toBottomOf="@+id/imageview_movie_poster"
+                    tools:text="Movie title" />
 
                 <TextView
                     android:id="@+id/textview_plot_synopsis"
@@ -50,7 +52,8 @@
                     android:layout_marginTop="16dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/barrier" />
+                    app:layout_constraintTop_toTopOf="@+id/barrier"
+                    tools:text="This is the movie plot." />
 
                 <TextView
                     android:id="@+id/textview_user_rating"
@@ -58,7 +61,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textView_original_title" />
+                    app:layout_constraintTop_toBottomOf="@+id/textView_original_title"
+                    tools:text="User rating." />
 
                 <TextView
                     android:id="@+id/textview_release_date"
@@ -67,7 +71,46 @@
                     android:layout_marginStart="16dp"
                     app:layout_constraintBaseline_toBaselineOf="@+id/textview_user_rating"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/textview_user_rating" />
+                    app:layout_constraintStart_toEndOf="@+id/textview_user_rating"
+                    tools:text="Release date." />
+
+                <TextView
+                    android:id="@+id/textview_videos"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="@string/movie_detail_videos"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textview_plot_synopsis" />
+
+                <LinearLayout
+                    android:id="@+id/linearlayout_videos"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:orientation="vertical"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textview_videos" />
+
+                <TextView
+                    android:id="@+id/textview_reviews"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="@string/movie_detail_reviews"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/linearlayout_videos" />
+
+                <LinearLayout
+                    android:id="@+id/linearlayout_reviews"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:orientation="vertical"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textview_reviews" />
 
                 <android.support.constraint.Barrier
                     android:id="@+id/barrier"

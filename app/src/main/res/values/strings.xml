@@ -12,6 +12,8 @@
     <string name="movie_detail_plot_synopsis">Plot Synopsis:\n%s</string>
     <string name="movie_detail_release_date">Release Date: %s</string>
     <string name="movie_detail_user_rating">User Rating: %s</string>
+    <string name="movie_detail_videos">Videos</string>
+    <string name="movie_detail_reviews">Reviews</string>
 
     <string name="content_description_movie_poster">Movie Poster</string>
 </resources>

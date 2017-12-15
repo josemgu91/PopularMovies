@@ -1,6 +1,7 @@
 package com.josemgu91.popularmovies;
 
 import android.content.ContentResolver;
+import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -44,7 +45,7 @@ public class MovieDetailsSyncTask {
         final List<Review> reviews = ServerResponseParser.parseReviews(reviewsJsonString);
 
         contentResolver.delete(
-                MovieContract.ReviewEntry.CONTENT_URI,
+                ContentUris.withAppendedId(MovieContract.ReviewEntry.CONTENT_URI, Integer.valueOf(movieId)),
                 null,
                 null
         );
@@ -61,7 +62,7 @@ public class MovieDetailsSyncTask {
         }
 
         contentResolver.delete(
-                MovieContract.VideoEntry.CONTENT_URI,
+                ContentUris.withAppendedId(MovieContract.VideoEntry.CONTENT_URI, Integer.valueOf(movieId)),
                 null,
                 null
         );

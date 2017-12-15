@@ -159,16 +159,16 @@ public class MoviesProvider extends ContentProvider {
         final int matchCode = URI_MATCHER.match(uri);
         int rowsDeleted = 0;
         int reviewRowsDeleted = 0;
-        int trailerRowsDeleted = 0;
+        int videoRowsDeleted = 0;
         int movieRowsDeleted = 0;
         switch (matchCode) {
-            case URI_MOVIE_WITH_ID:
+            case URI_MOVIE_WITH_ID: {
                 final String movieId = uri.getLastPathSegment();
                 reviewRowsDeleted = databaseManager.getWritableDatabase()
                         .delete(MovieContract.ReviewEntry.TABLE_NAME,
                                 MovieContract.ReviewEntry.MOVIE_ID + "=?",
                                 new String[]{movieId});
-                trailerRowsDeleted = databaseManager.getWritableDatabase()
+                videoRowsDeleted = databaseManager.getWritableDatabase()
                         .delete(MovieContract.VideoEntry.TABLE_NAME,
                                 MovieContract.VideoEntry.MOVIE_ID + "=?",
                                 new String[]{movieId});
@@ -177,12 +177,13 @@ public class MoviesProvider extends ContentProvider {
                                 MovieContract.MovieEntry._ID,
                                 new String[]{movieId});
                 break;
+            }
             case URI_MOVIE:
                 reviewRowsDeleted = databaseManager.getWritableDatabase()
                         .delete(MovieContract.ReviewEntry.TABLE_NAME,
                                 null,
                                 null);
-                trailerRowsDeleted = databaseManager.getWritableDatabase()
+                videoRowsDeleted = databaseManager.getWritableDatabase()
                         .delete(MovieContract.VideoEntry.TABLE_NAME,
                                 null,
                                 null);
@@ -191,6 +192,22 @@ public class MoviesProvider extends ContentProvider {
                                 null,
                                 null);
                 break;
+            case URI_VIDEO_WITH_MOVIE_ID: {
+                final String movieId = uri.getLastPathSegment();
+                videoRowsDeleted = databaseManager.getWritableDatabase()
+                        .delete(MovieContract.VideoEntry.TABLE_NAME,
+                                MovieContract.VideoEntry.MOVIE_ID + "=?",
+                                new String[]{movieId});
+                break;
+            }
+            case URI_REVIEW_WITH_MOVIE_ID: {
+                final String movieId = uri.getLastPathSegment();
+                videoRowsDeleted = databaseManager.getWritableDatabase()
+                        .delete(MovieContract.ReviewEntry.TABLE_NAME,
+                                MovieContract.ReviewEntry.MOVIE_ID + "=?",
+                                new String[]{movieId});
+                break;
+            }
             case UriMatcher.NO_MATCH:
                 throw new IllegalArgumentException("Unknown URI: " + uri);
             default:
@@ -200,9 +217,9 @@ public class MoviesProvider extends ContentProvider {
             getContext().getContentResolver().notifyChange(MovieContract.ReviewEntry.CONTENT_URI, null);
             rowsDeleted += reviewRowsDeleted;
         }
-        if (trailerRowsDeleted > 0) {
+        if (videoRowsDeleted > 0) {
             getContext().getContentResolver().notifyChange(MovieContract.VideoEntry.CONTENT_URI, null);
-            rowsDeleted += trailerRowsDeleted;
+            rowsDeleted += videoRowsDeleted;
         }
         if (movieRowsDeleted > 0) {
             getContext().getContentResolver().notifyChange(MovieContract.MovieEntry.CONTENT_URI, null);

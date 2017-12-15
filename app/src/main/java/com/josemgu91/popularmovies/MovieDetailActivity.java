@@ -12,8 +12,11 @@ import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -21,6 +24,8 @@ import com.josemgu91.popularmovies.network.NetworkUtils;
 import com.squareup.picasso.Picasso;
 
 import java.net.MalformedURLException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by jose on 10/13/17.
@@ -44,6 +49,11 @@ public class MovieDetailActivity extends AppCompatActivity
     private TextView textViewMovieReleaseDate;
     private TextView textViewMoviePlotSynopsis;
 
+    private ViewGroup viewGroupVideos;
+    private ViewGroup viewGroupReviews;
+
+    private LayoutInflater layoutInflater;
+
     private Menu menu;
 
     private boolean isFavorite;
@@ -57,12 +67,30 @@ public class MovieDetailActivity extends AppCompatActivity
         textViewMovieUserRating = findViewById(R.id.textview_user_rating);
         textViewMovieReleaseDate = findViewById(R.id.textview_release_date);
         textViewMoviePlotSynopsis = findViewById(R.id.textview_plot_synopsis);
-        final Intent intentThatStartedThisActivity = getIntent();
 
-        if (intentThatStartedThisActivity.hasExtra(PARAM_MOVIE_REMOTE_ID)) {
-            movieRemoteId = intentThatStartedThisActivity.getStringExtra(PARAM_MOVIE_REMOTE_ID);
-            getSupportLoaderManager().initLoader(LOADER_ID_MOVIE_DETAIL, null, this);
+        layoutInflater = LayoutInflater.from(this);
+
+        viewGroupVideos = findViewById(R.id.linearlayout_videos);
+        viewGroupReviews = findViewById(R.id.linearlayout_reviews);
+
+        if (savedInstanceState == null) {
+            final Intent intentThatStartedThisActivity = getIntent();
+            if (intentThatStartedThisActivity.hasExtra(PARAM_MOVIE_REMOTE_ID)) {
+                movieRemoteId = intentThatStartedThisActivity.getStringExtra(PARAM_MOVIE_REMOTE_ID);
+                getSupportLoaderManager().initLoader(LOADER_ID_MOVIE_DETAIL, null, this);
+            }
+        } else {
+            if (savedInstanceState.containsKey(PARAM_MOVIE_REMOTE_ID)) {
+                movieRemoteId = savedInstanceState.getString(PARAM_MOVIE_REMOTE_ID);
+                getSupportLoaderManager().initLoader(LOADER_ID_MOVIE_DETAIL, null, this);
+            }
         }
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString(PARAM_MOVIE_REMOTE_ID, movieRemoteId);
     }
 
     @Override
@@ -129,19 +157,48 @@ public class MovieDetailActivity extends AppCompatActivity
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        if (loader.getId() == LOADER_ID_MOVIE_DETAIL) {
-            if (data.moveToNext()) {
-                movieId = data.getString(data.getColumnIndex(MovieContract.MovieEntry._ID));
-                final String posterPath = data.getString(data.getColumnIndex(MovieContract.MovieEntry.POSTER_REMOTE_ID));
-                final String originalTitle = data.getString(data.getColumnIndex(MovieContract.MovieEntry.TITLE));
-                final String userRating = data.getString(data.getColumnIndex(MovieContract.MovieEntry.USER_RATING));
-                final String releaseDate = data.getString(data.getColumnIndex(MovieContract.MovieEntry.RELEASE_DATE));
-                final String plotSynopsis = data.getString(data.getColumnIndex(MovieContract.MovieEntry.PLOT_SYNOPSIS));
-                fillMovieDetails(posterPath, originalTitle, userRating, releaseDate, plotSynopsis);
+        switch (loader.getId()) {
+            case LOADER_ID_MOVIE_DETAIL:
+                if (data.moveToNext()) {
+                    movieId = data.getString(data.getColumnIndex(MovieContract.MovieEntry._ID));
 
-                isFavorite = data.getInt(data.getColumnIndex(MovieContract.MovieEntry.IS_FAVORITE)) == 1;
-                invalidateOptionsMenu();
-            }
+                    final MovieDetail movieDetail = new MovieDetail();
+                    movieDetail.posterPath = data.getString(data.getColumnIndex(MovieContract.MovieEntry.POSTER_REMOTE_ID));
+                    movieDetail.originalTitle = data.getString(data.getColumnIndex(MovieContract.MovieEntry.TITLE));
+                    movieDetail.userRating = data.getString(data.getColumnIndex(MovieContract.MovieEntry.USER_RATING));
+                    movieDetail.releaseDate = data.getString(data.getColumnIndex(MovieContract.MovieEntry.RELEASE_DATE));
+                    movieDetail.plotSynopsis = data.getString(data.getColumnIndex(MovieContract.MovieEntry.PLOT_SYNOPSIS));
+                    fillMovieDetails(movieDetail);
+
+                    isFavorite = data.getInt(data.getColumnIndex(MovieContract.MovieEntry.IS_FAVORITE)) == 1;
+                    invalidateOptionsMenu();
+
+                    getSupportLoaderManager().initLoader(LOADER_ID_MOVIE_VIDEOS, null, this);
+                    getSupportLoaderManager().initLoader(LOADER_ID_MOVIE_REVIEWS, null, this);
+
+                    refresh();
+                }
+                break;
+            case LOADER_ID_MOVIE_REVIEWS:
+                final List<Review> reviews = new ArrayList<>();
+                while (data.moveToNext()) {
+                    final Review review = new Review();
+                    review.author = data.getString(data.getColumnIndex(MovieContract.ReviewEntry.AUTHOR));
+                    review.content = data.getString(data.getColumnIndex(MovieContract.ReviewEntry.CONTENT));
+                    reviews.add(review);
+                }
+                fillReviews(reviews);
+                break;
+            case LOADER_ID_MOVIE_VIDEOS:
+                final List<Video> videos = new ArrayList<>();
+                while (data.moveToNext()) {
+                    final Video video = new Video();
+                    video.title = data.getString(data.getColumnIndex(MovieContract.VideoEntry.TITLE));
+                    video.url = Uri.parse(data.getString(data.getColumnIndex(MovieContract.VideoEntry.URL)));
+                    videos.add(video);
+                }
+                fillVideos(videos);
+                break;
         }
     }
 
@@ -156,25 +213,56 @@ public class MovieDetailActivity extends AppCompatActivity
     }
 
     private void refresh() {
-
+        dispatchSync(movieId);
     }
 
-    private void fillMovieDetails(final String posterPath,
-                                  final String originalTitle,
-                                  final String userRating,
-                                  final String releaseDate,
-                                  final String plotSynopsis) {
+    private void fillReviews(List<Review> reviews) {
+        for (final Review review : reviews) {
+            final View view = layoutInflater.inflate(R.layout.element_review, viewGroupReviews, false);
+            final TextView textViewTitle = view.findViewById(R.id.textview_author);
+            final TextView textViewContent = view.findViewById(R.id.textview_content);
+            textViewTitle.setText(review.author);
+            textViewContent.setText(review.content);
+            viewGroupReviews.addView(view);
+        }
+    }
+
+    private void fillVideos(List<Video> videos) {
+        for (final Video video : videos) {
+            final View view = layoutInflater.inflate(R.layout.element_video, viewGroupVideos, false);
+            final TextView textViewTitle = view.findViewById(R.id.textview_title);
+            textViewTitle.setText(video.title);
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    startActivity(createVideoIntent(video.url));
+                }
+            });
+            viewGroupVideos.addView(view);
+        }
+    }
+
+    private void dispatchSync(final String movieId) {
+        startService(new Intent(this, MoviesSyncIntentService.class)
+                .putExtra(MoviesSyncIntentService.PARAM_MOVIE_ID, movieId));
+    }
+
+    private Intent createVideoIntent(final Uri videoUri) {
+        return new Intent(Intent.ACTION_VIEW, videoUri);
+    }
+
+    private void fillMovieDetails(final MovieDetail movieDetail) {
         try {
             Picasso.with(this)
-                    .load(NetworkUtils.createImageUri(posterPath, NetworkUtils.IMAGE_SIZE_BIG))
+                    .load(NetworkUtils.createImageUri(movieDetail.posterPath, NetworkUtils.IMAGE_SIZE_BIG))
                     .into(imageViewMoviePoster);
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
-        textViewMovieTitle.setText(getString(R.string.movie_detail_original_title, originalTitle));
-        textViewMovieUserRating.setText(getString(R.string.movie_detail_user_rating, userRating));
-        textViewMovieReleaseDate.setText(getString(R.string.movie_detail_release_date, releaseDate));
-        textViewMoviePlotSynopsis.setText(getString(R.string.movie_detail_plot_synopsis, plotSynopsis));
+        textViewMovieTitle.setText(getString(R.string.movie_detail_original_title, movieDetail.originalTitle));
+        textViewMovieUserRating.setText(getString(R.string.movie_detail_user_rating, movieDetail.userRating));
+        textViewMovieReleaseDate.setText(getString(R.string.movie_detail_release_date, movieDetail.releaseDate));
+        textViewMoviePlotSynopsis.setText(getString(R.string.movie_detail_plot_synopsis, movieDetail.plotSynopsis));
     }
 
     private void setFavoriteIcon(final boolean isFavorite) {
@@ -194,5 +282,23 @@ public class MovieDetailActivity extends AppCompatActivity
                 null
         );
         setFavoriteIcon(!isFavorite);
+    }
+
+    private static class Review {
+        private String author;
+        private String content;
+    }
+
+    private static class Video {
+        private String title;
+        private Uri url;
+    }
+
+    private static class MovieDetail {
+        private String posterPath;
+        private String originalTitle;
+        private String userRating;
+        private String releaseDate;
+        private String plotSynopsis;
     }
 }
